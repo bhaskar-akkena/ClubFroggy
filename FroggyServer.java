@@ -183,7 +183,7 @@ class ClientThread extends Thread{
     
     switch(request){
      case"d":
-      doDisconnect();
+      doClientDisconnect();
       break;
      case"c":
       doCreateAccount();
@@ -202,7 +202,7 @@ class ClientThread extends Thread{
  }//end run
  
  //method to allow user to disconnect
- public void doServerDisconnect(){
+ public void doClientDisconnect(){
   try{
    in.close();
    out.close();
