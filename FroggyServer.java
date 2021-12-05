@@ -113,6 +113,7 @@ class ServerThread extends Thread{
  private ClientThread ct;
  private Socket cSocket=null;
  private FroggyServer base;
+ private boolean keepGoing=true;
  
  //final
  private static final int PORT=5002;
@@ -142,7 +143,7 @@ class ServerThread extends Thread{
    }//end try/catch
    
    //Creates a thread for the client
-   ct=new ClientThread(cSocket, base);
+   ct=new ClientThread(cSocket, base, this);
    ct.start();
   }//end while
  }//end run
@@ -159,11 +160,13 @@ class ClientThread extends Thread{
  private boolean loggedIn=false;
  private FroggyServer base;
  private Account account;
+ private ServerThread server;
  
  //constructor
- public ClientThread(Socket cs, FroggyServer fs){
+ public ClientThread(Socket cs, FroggyServer fs, ServerThread st){
   cSocket=cs;
   base=fs;
+  server=st;
  }//end Constructor
  
  public void run(){
@@ -198,8 +201,17 @@ class ClientThread extends Thread{
   }//end try/catch
  }//end run
  
- //method to disconnect user
- public void doDisconnect(){}//end doDisconnect 
+ //method to allow user to disconnect
+ public void doServerDisconnect(){
+  try{
+   in.close();
+   out.close();
+   cSocket.close();
+   keepGoing=false;
+  }catch(IOException ioe){base.log("IOException "+ioe);
+   return;
+  }//end try/catch
+ }//end doDisconnect 
  
  //method to create an account
  public void doCreateAccount(){
