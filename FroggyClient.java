@@ -13,6 +13,7 @@ public class FroggyClient{
  private boolean loggedIn=false;
  private TextArea taLog;
  private Account account;
+ private ClientThread ct;
  
  //for use in messages
  private String response;
@@ -27,8 +28,18 @@ public class FroggyClient{
    soc=new Socket(address, PORT);
    oos=new ObjectOutputStream(soc.getOutputStream());
    ois=new ObjectInputStream(soc.getInputStream());
+   ct=new ClientThread(ois);
+   ct.start();
   }catch(Exception e){return;}
  }//endFroggyClient
+ 
+ //methods to display to the textArea
+ public void informUser(String s){
+  taLog.appendText(s+"\n");
+ }//informs user of something
+ public void informUser(Message m){
+  taLog.appendText(m.toString()+"\n");
+ }//appends a message
  
  //disconnects from the server
  public void disconnect(){
@@ -58,7 +69,7 @@ public class FroggyClient{
   try{
    //Informs the server of the account's username, password, color, and age
    oos.writeUTF("c");
-   account=new Account(username, password, color, age);
+   account=new Account(username, password, age, color);
    oos.writeObject(account);
    oos.flush();
   }catch(IOException ioe){return;}
@@ -88,6 +99,7 @@ public class FroggyClient{
  //ClientThread's purpose is to listen for incoming transmissions and react accordingly
  class ClientThread extends Thread{
   ObjectInputStream ois=null;
+  keepGoing=true;
   
   //Constructor
   public ClientThread(ObjectInputStream d){
@@ -96,7 +108,7 @@ public class FroggyClient{
   
   public void run(){
    //Reads incoming from server, reacts appropriately
-   while(true){
+   while(keepGoing){
     try{
      response = ois.readUTF();
      
@@ -130,9 +142,19 @@ public class FroggyClient{
       
       //informs the user that there's a new message
       case"nm":
-       message=ois.readObject();
-       informUser(message);
-       break;
+       try{
+        message=(Message)ois.readObject();
+        informUser(message);
+        break;
+       }catch(ClassNotFoundException cnfe){return;}
+       
+      //disconnects
+      case"di":
+       informUser("Disconnected by Server");
+       keepGoing=false;
+       ois.close();
+       oos.close();
+       socket.close();
      }//end switch
     }catch(IOException ioe){return;}//end try/catch   
    }//end while
