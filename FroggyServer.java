@@ -90,6 +90,21 @@ public class FroggyServer{
     return "iu";
   }//end synchronized
  }//end doLogIn
+ 
+ //method to create an account
+ public String doCreateAccount(Account a){
+  //synchronized on the map
+  synchronized(map){
+   //if the username already exists
+   if(map.containsKey(a.getName()))
+    return "ut";
+   //otherwise, creates the account
+   else{
+    map.put(a.getName(), a);
+    return "ac";
+   }
+  }//end synchronized
+ }//end doCreateAccount
 }//end FroggyServer
 
 //Thread to do server things
@@ -143,6 +158,7 @@ class ClientThread extends Thread{
  private boolean keepGoing=true;
  private boolean loggedIn=false;
  private FroggyServer base;
+ private Account account;
  
  //constructor
  public ClientThread(Socket cs, FroggyServer fs){
@@ -186,7 +202,32 @@ class ClientThread extends Thread{
  public void doDisconnect(){}//end doDisconnect 
  
  //method to create an account
- public void doCreateAccount(){}
+ public void doCreateAccount(){
+  try{
+   try{
+    //gets the account, and checks if it's valid
+    account=(Account)in.readObject();
+    request=base.doCreateAccount(account);
+   }catch(ClassNotFoundException cnfe){base.log("ClassNotFoundException "+cnfe);
+    return;
+   }//end try/catch
+   
+   //informs the client of the result
+   switch(request){
+    case "ac":
+     loggedIn=true;
+     out.writeUTF("ac");
+     out.flush();
+     break;
+    case "ut":
+     out.writeUTF("ut");
+     out.flush();
+     break;
+   }//end switch
+  }catch(IOException ioe){base.log("IOException "+ioe);
+   return;
+  }//end try/catch
+ }//end doCreateAccount
  
  //method to log in a user
  public void doLogIn(){
