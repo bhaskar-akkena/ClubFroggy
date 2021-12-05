@@ -20,4 +20,9 @@ public class Message implements Serializable{
  public void setName(String n){name=n;}
  public void setContents(String c){contents=c;}
  public void setColor(String c){color=c;}
+ 
+ //temporary toString method
+ public String toString(){
+  return(name+": "+contents);
+ }
 }//end class
