@@ -110,6 +110,7 @@ public class FroggyServer{
 //Thread to do server things
 class ServerThread extends Thread{
  private ServerSocket sSocket=null;
+ private ArrayList<ClientThread> ctList=new ArrayList<ClientThread>();
  private ClientThread ct;
  private Socket cSocket=null;
  private FroggyServer base;
@@ -142,11 +143,17 @@ class ServerThread extends Thread{
     return;
    }//end try/catch
    
-   //Creates a thread for the client
+   //Creates a thread for the client, starts it, and stores it in an ArrayList
    ct=new ClientThread(cSocket, base, this);
    ct.start();
+   ctList.add(ct);
   }//end while
  }//end run
+ 
+ //disconnects all clients
+ public void doServerDisconnect(){
+  ctList.forEach((c) -> c.doServerDisconnect());
+ }//end doServerDisconnect()
 }//end ServerThread
 
 class ClientThread extends Thread{
@@ -212,6 +219,19 @@ class ClientThread extends Thread{
    return;
   }//end try/catch
  }//end doDisconnect 
+ 
+ public void doServerDisconnect(){
+  try{
+   out.writeUTF("di");
+   out.flush();
+   out.close();
+   in.close();
+   cSocket.close();
+   keepGoing=false;
+  }catch(IOException ioe){base.log("IOException "+ioe);
+   return;
+  }//end try/catch
+ }//end doServerDisconnect
  
  //method to create an account
  public void doCreateAccount(){
