@@ -18,6 +18,7 @@ public class ServerGUI extends Application{
   //sets up and displays a GUI
   stage=s;
   stage.setTitle("Club Froggy Server");
+  taLog.setEditable(false);
   scene=new Scene(taLog);
   stage.setScene(scene);
   stage.show();
