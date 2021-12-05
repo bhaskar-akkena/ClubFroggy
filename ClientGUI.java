@@ -3,9 +3,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -24,6 +25,14 @@ public class ClientGui extends Application {
     BufferedReader input;
     PrintWriter output;
     Socket server;
+    Menu menu = new Menu("Froggy");
+    MenuBar menuBar = new MenuBar();
+    MenuItem menuItem1 = new MenuItem("Blue");
+    MenuItem menuItem2 = new MenuItem("Green");
+    MenuItem menuItem3 = new MenuItem("Orange");
+    MenuItem menuItem4 = new MenuItem("Pink");
+    MenuItem menuItem5 = new MenuItem("Purple");
+    MenuItem menuItem6 = new MenuItem("Yellow");
     HBox hbox = new HBox();
     VBox vbox = new VBox();
     GridPane gridPane = new GridPane();
@@ -45,6 +54,55 @@ public class ClientGui extends Application {
     public void start(Stage stage) throws Exception {
         stage.setTitle("FroggyChat");
 
+        Image icon = new Image(new FileInputStream("Imgs//frog.png"));
+        Image imgBlue = new Image(new FileInputStream("Imgs//blue.png"));
+        Image imgGreen = new Image(new FileInputStream("Imgs//green.png"));
+        Image imgOrange = new Image(new FileInputStream("Imgs//orange.png"));
+        Image imgPink = new Image(new FileInputStream("Imgs//pink.png"));
+        Image imgPurple = new Image(new FileInputStream("Imgs//purple.png"));
+        Image imgYellow = new Image(new FileInputStream("Imgs//yellow.png"));
+
+        ImageView ivIcon = new ImageView(icon);
+        ivIcon.setFitHeight(20);
+        ivIcon.setFitWidth(20);
+
+        ImageView ivBlue = new ImageView(imgBlue);
+        ivBlue.setFitHeight(20);
+        ivBlue.setFitWidth(20);
+
+        ImageView ivGreen = new ImageView(imgGreen);
+        ivGreen.setFitHeight(20);
+        ivGreen.setFitWidth(20);
+
+        ImageView ivOrange = new ImageView(imgOrange);
+        ivOrange.setFitHeight(20);
+        ivOrange.setFitWidth(20);
+
+        ImageView ivPink = new ImageView(imgPink);
+        ivPink.setFitHeight(20);
+        ivPink.setFitWidth(20);
+
+        ImageView ivPurple = new ImageView(imgPurple);
+        ivPurple.setFitHeight(20);
+        ivPurple.setFitWidth(20);
+
+        ImageView ivYellow = new ImageView(imgYellow);
+        ivYellow.setFitHeight(20);
+        ivYellow.setFitWidth(20);
+
+
+        menu.setGraphic(ivIcon);
+        menuItem1.setGraphic(ivBlue);
+        menuItem2.setGraphic(ivGreen);
+        menuItem3.setGraphic(ivOrange);
+        menuItem4.setGraphic(ivPink);
+        menuItem5.setGraphic(ivPurple);
+        menuItem6.setGraphic(ivYellow);
+
+        menuBar.getMenus().add(menu);
+
+        menu.getItems().addAll(menuItem1, menuItem2, menuItem3, menuItem4, menuItem5, menuItem6);
+
         hbox.getChildren().addAll(jtextFilDiscu, jtextListUsers);
         hbox.setPrefHeight(500);
         hbox.setPrefWidth(700);
@@ -56,6 +114,9 @@ public class ClientGui extends Application {
         jtextFilDiscu.setPadding(new Insets(2, 2, 2, 2));
         jtextListUsers.setPadding(new Insets(2, 2, 2, 2));
         jtextInputChat.setPadding(new Insets(10, 10, 10, 10));
+
+        jtextFilDiscu.setEditable(false);
+        jtextListUsers.setEditable(false);
 
         jsbtndeco.setStyle("-fx-background-color: #e34234; ");
         jsbtn.setStyle("-fx-background-color: #32cd32; ");
@@ -72,7 +133,7 @@ public class ClientGui extends Application {
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         gridPane.setHgap(635);
 
-        vbox.getChildren().addAll(hbox, jtextInputChat, gridPane);
+        vbox.getChildren().addAll(menuBar, hbox, jtextInputChat, gridPane);
 
         Scene scene = new Scene(vbox, 800, 600);
 
