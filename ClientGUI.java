@@ -18,7 +18,7 @@ import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ClientGUI extends Application {
+public class ClientGui extends Application {
     final TextArea jtextFilDiscu = new TextArea();
     final TextArea jtextListUsers = new TextArea();
     final TextField jtextInputChat = new TextField();
