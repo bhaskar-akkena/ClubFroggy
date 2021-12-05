@@ -12,6 +12,7 @@ public class FroggyClient{
  private boolean hasConnected=false;
  private boolean loggedIn=false;
  private TextArea taLog;
+ private Account account;
  
  //for use in messages
  private String response;
@@ -53,12 +54,12 @@ public class FroggyClient{
  }//end Log In
  
  //method to create an account
- public void createAccount(String username, String password){
+ public void createAccount(String username, String password, String color, int age){
   try{
-   //Informs the server of the account's username and password
+   //Informs the server of the account's username, password, color, and age
    oos.writeUTF("c");
-   oos.writeUTF(username);
-   oos.writeUTF(password);
+   account=new Account(username, password, color, age);
+   oos.writeObject(account);
    oos.flush();
   }catch(IOException ioe){return;}
  }//end createAccount
