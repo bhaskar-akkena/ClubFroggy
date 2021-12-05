@@ -17,7 +17,7 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ClientGui extends Application {
+public class ClientGUI extends Application {
     final TextArea jtextFilDiscu = new TextArea();
     final TextArea jtextListUsers = new TextArea();
     final TextField jtextInputChat = new TextField();
