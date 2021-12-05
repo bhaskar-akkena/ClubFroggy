@@ -18,7 +18,7 @@ import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ClientGui extends Application {
+public class ClientGUI extends Application {
     final TextArea jtextFilDiscu = new TextArea();
     final TextArea jtextListUsers = new TextArea();
     final TextField jtextInputChat = new TextField();
@@ -32,7 +32,8 @@ public class ClientGui extends Application {
     MenuItem menuItem3 = new MenuItem("Orange");
     MenuItem menuItem4 = new MenuItem("Pink");
     MenuItem menuItem5 = new MenuItem("Purple");
-    MenuItem menuItem6 = new MenuItem("Yellow");
+    MenuItem menuItem6 = new MenuItem("Red");
+    MenuItem menuItem7 = new MenuItem("Yellow");
     HBox hbox = new HBox();
     VBox vbox = new VBox();
     GridPane gridPane = new GridPane();
@@ -60,6 +61,7 @@ public class ClientGui extends Application {
         Image imgOrange = new Image(new FileInputStream("Imgs//orange.png"));
         Image imgPink = new Image(new FileInputStream("Imgs//pink.png"));
         Image imgPurple = new Image(new FileInputStream("Imgs//purple.png"));
+        Image imgRed = new Image(new FileInputStream("Imgs//red.png"));
         Image imgYellow = new Image(new FileInputStream("Imgs//yellow.png"));
 
         ImageView ivIcon = new ImageView(icon);
@@ -86,6 +88,10 @@ public class ClientGui extends Application {
         ivPurple.setFitHeight(20);
         ivPurple.setFitWidth(20);
 
+        ImageView ivRed = new ImageView(imgRed);
+        ivRed.setFitHeight(20);
+        ivRed.setFitWidth(20);
+
         ImageView ivYellow = new ImageView(imgYellow);
         ivYellow.setFitHeight(20);
         ivYellow.setFitWidth(20);
@@ -97,11 +103,12 @@ public class ClientGui extends Application {
         menuItem3.setGraphic(ivOrange);
         menuItem4.setGraphic(ivPink);
         menuItem5.setGraphic(ivPurple);
-        menuItem6.setGraphic(ivYellow);
+        menuItem6.setGraphic(ivRed);
+        menuItem7.setGraphic(ivYellow);
 
         menuBar.getMenus().add(menu);
 
-        menu.getItems().addAll(menuItem1, menuItem2, menuItem3, menuItem4, menuItem5, menuItem6);
+        menu.getItems().addAll(menuItem1, menuItem2, menuItem3, menuItem4, menuItem5, menuItem6, menuItem7);
 
         hbox.getChildren().addAll(jtextFilDiscu, jtextListUsers);
         hbox.setPrefHeight(500);
