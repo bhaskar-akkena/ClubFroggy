@@ -9,20 +9,16 @@ public class FroggyServer{
  //Objects+Variables
  private ObjectInputStream ois=null;
  private ObjectOutputStream oos=null;
- private static TextArea taLog;
+ private TextArea taLog;
  private TreeMap<String, Account> map = new TreeMap<String, Account>();
  private Account tempAccount;
  private ServerThread st = null;
- 
- //socket 
- private Socket sSocket=null;
- private Socket cSocket=null;
 
  //final
  private final File ACCOUNT_FILE=new File("accounts.dat");
 
  //Constructor. 
- public void FroggyClient(TextArea ta){
+ public void FroggyServer(TextArea ta){
   taLog=ta;
 
   //read the file into the TreeMap
@@ -47,12 +43,12 @@ public class FroggyServer{
   }//end try/catch
   
   //Make it do server things
-  st=new ServerThread();
+  st=new ServerThread(this);
   st.start();
  }//end constructor
  
  //logs to the textarea in a thread-safe way
- public static void log(String s){
+ public void log(String s){
   Platform.runLater(new Runnable(){
   public void run(){
    taLog.appendText(s);
@@ -77,6 +73,23 @@ public class FroggyServer{
    oos.close();
   }catch(IOException ioe){return;}
  }//end save
+ 
+ //logs in a user
+ public String doLogIn(String userName, String password){
+  //synchronized on the hashmap
+  synchronized(map){
+   //if the username is in the map
+   if(map.containsKey(userName)){
+    //if the passwords match
+    if(password.equals(map.get(userName).getPassword()))
+     return "li";
+    else
+     return "ip";
+   }//end if
+   else
+    return "iu";
+  }//end synchronized
+ }//end doLogIn
 }//end FroggyServer
 
 //Thread to do server things
@@ -84,15 +97,15 @@ class ServerThread extends Thread{
  private ServerSocket sSocket=null;
  private ClientThread ct;
  private Socket cSocket=null;
+ private FroggyServer base;
  
  //final
  private static final int PORT=5002;
 
  
  //basic Constructor
- public void ServerThread(ServerSocket ss, Socket s){
-  sSocket=ss;
-  cSocket=s;
+ public ServerThread(FroggyServer fs){
+  base=fs;
  }//end constructor
  
  //run method
@@ -100,7 +113,7 @@ class ServerThread extends Thread{
   //sets up the serversocket
   try{
    sSocket=new ServerSocket(PORT);
-  }catch(IOException ioe){FroggyServer.log("IOException "+ioe);
+  }catch(IOException ioe){base.log("IOException "+ioe);
    return;
   }//end try/catch
   
@@ -109,12 +122,12 @@ class ServerThread extends Thread{
    try{
     //The client's socket from the server's socket
     cSocket=sSocket.accept();
-   }catch(IOException ioe){FroggyServer.log("IOException "+ioe);
+   }catch(IOException ioe){base.log("IOException "+ioe);
     return;
    }//end try/catch
    
    //Creates a thread for the client
-   ct=new ClientThread(cSocket);
+   ct=new ClientThread(cSocket, base);
    ct.start();
   }//end while
  }//end run
@@ -123,19 +136,28 @@ class ServerThread extends Thread{
 class ClientThread extends Thread{
  private Socket cSocket=null;
  private String request="";
+ private String userName="";
+ private String password="";
  private ObjectInputStream in=null;
  private ObjectOutputStream out =null;
  private boolean keepGoing=true;
+ private boolean loggedIn=false;
+ private FroggyServer base;
  
  //constructor
- public ClientThread(Socket cs){
+ public ClientThread(Socket cs, FroggyServer fs){
   cSocket=cs;
+  base=fs;
  }//end Constructor
  
  public void run(){
   //Informs the user that there's a connection
-  FroggyServer.log("User Connected");
+  base.log("User Connected");
   try{
+   //input and output streams
+   in=new ObjectInputStream(cSocket.getInputStream());
+   out=new ObjectOutputStream(cSocket.getOutputStream());
+   
    while(keepGoing){
     //waits for inputs
     request=in.readUTF();
@@ -155,13 +177,55 @@ class ClientThread extends Thread{
       break; 
     }//end switch
    }//end while
-  }catch(IOException ioe){FroggyServer.log("IOException "+ioe);
+  }catch(IOException ioe){base.log("IOException "+ioe);
    return;
   }//end try/catch
  }//end run
  
- public void doDisconnect(){}
+ //method to disconnect user
+ public void doDisconnect(){}//end doDisconnect 
+ 
+ //method to create an account
  public void doCreateAccount(){}
- public void doLogIn(){}
+ 
+ //method to log in a user
+ public void doLogIn(){
+  try{
+   //reads the username and password
+   userName=in.readUTF();
+   password=in.readUTF();
+ 
+   //Calls a method that's in a better place
+   request=base.doLogIn(userName, password);
+   
+   //synchronized on the outputstream
+   synchronized(out){
+    
+    //switch on request
+    switch(request){
+     //informs client that they're logged in
+     case "li":
+      loggedIn=true;
+      out.writeUTF("li");
+      out.flush();
+      break;
+     //informs client that their password is wrong
+     case "ip":
+      out.writeUTF("ip");
+      out.flush();
+      break;
+     //informs user that their username is wrong
+     case "iu":
+      out.writeUTF("iu");
+      out.flush();
+      break;
+    }//end switch
+   }//end synchronized
+  }catch(IOException ioe){base.log("IOException "+ioe);
+   return;
+  }//end try/catch
+ }//end doLogIn
+ 
+ //method to send a message
  public void doSendMessage(){}
 }//end ClientThread
