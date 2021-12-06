@@ -9,6 +9,8 @@ public class ServerGUI extends Application{
  private TextArea taLog=new TextArea();
  private Stage stage;
  private Scene scene;
+ private FroggyServer fs;
+
  
  public static void main(String[] args){launch();}
  
@@ -22,5 +24,6 @@ public class ServerGUI extends Application{
   scene=new Scene(taLog);
   stage.setScene(scene);
   stage.show();
+  fs=new FroggyServer(taLog);
  }//end start
 }//end ServerGUI
