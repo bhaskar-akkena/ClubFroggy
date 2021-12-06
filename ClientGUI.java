@@ -3,39 +3,69 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Optional;
 
-public class ClientGUI extends Application {
+public class ClientGui extends Application {
+
+    Scene Scene1, Scene2;
+
+    final TextArea jtintro = new TextArea();
+    final TextField jtfName = new TextField(this.name);
+    final TextField jtfport = new TextField(Integer.toString(this.PORT));
+    final TextField jtfAddr = new TextField(this.serverName);
+    final Button jcbtn = new Button("Connect");
+
+
     final TextArea jtextFilDiscu = new TextArea();
     final TextArea jtextListUsers = new TextArea();
     final TextField jtextInputChat = new TextField();
+
     BufferedReader input;
     PrintWriter output;
+
     Socket server;
-    HBox hbox = new HBox();
-    VBox vbox = new VBox();
+
+    Menu menu = new Menu("Select your Froggy");
+    MenuBar menuBar = new MenuBar();
+    MenuItem menuItem1 = new MenuItem("Blue");
+    MenuItem menuItem2 = new MenuItem("Green");
+    MenuItem menuItem3 = new MenuItem("Orange");
+    MenuItem menuItem4 = new MenuItem("Pink");
+    MenuItem menuItem5 = new MenuItem("Purple");
+    MenuItem menuItem6 = new MenuItem("Red");
+    MenuItem menuItem7 = new MenuItem("Yellow");
+
+    FlowPane flowPane = new FlowPane();
+    VBox vbox1 = new VBox();
+    VBox vbox2 = new VBox();
+    HBox hbox1 = new HBox();
     GridPane gridPane = new GridPane();
+
     Button jsbtn = new Button("Send");
     Button jsbtndeco = new Button("Disconnect");
-    private String oldMsg = "";
+
     private Thread read;
+
+    private String oldMsg = "";
     private String serverName;
     private int PORT;
     private String name;
-    private String color;
-    private FroggyClient fc;
 
     public static void main(String[] args) {
         launch();
@@ -44,12 +74,138 @@ public class ClientGUI extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
-        stage.setTitle("FroggyChat");
+    public void start(Stage primaryStage) throws Exception {
 
-        hbox.getChildren().addAll(jtextFilDiscu, jtextListUsers);
-        hbox.setPrefHeight(500);
-        hbox.setPrefWidth(700);
+        primaryStage.setTitle("FroggyChat");
+
+        //Scene 1
+
+        Image icon = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\frog.png"));
+        Image imgBlue = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\blue.png"));
+        Image imgGreen = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\green.png"));
+        Image imgOrange = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\orange.png"));
+        Image imgPink = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\pink.png"));
+        Image imgPurple = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\purple.png"));
+        Image imgRed = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\red.png"));
+        Image imgYellow = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\yellow.png"));
+
+        ImageView ivIcon = new ImageView(icon);
+        ivIcon.setFitHeight(20);
+        ivIcon.setFitWidth(20);
+
+        ImageView ivBlue = new ImageView(imgBlue);
+        ivBlue.setFitHeight(20);
+        ivBlue.setFitWidth(20);
+
+        ImageView ivGreen = new ImageView(imgGreen);
+        ivGreen.setFitHeight(20);
+        ivGreen.setFitWidth(20);
+
+        ImageView ivOrange = new ImageView(imgOrange);
+        ivOrange.setFitHeight(20);
+        ivOrange.setFitWidth(20);
+
+        ImageView ivPink = new ImageView(imgPink);
+        ivPink.setFitHeight(20);
+        ivPink.setFitWidth(20);
+
+        ImageView ivPurple = new ImageView(imgPurple);
+        ivPurple.setFitHeight(20);
+        ivPurple.setFitWidth(20);
+
+        ImageView ivRed = new ImageView(imgRed);
+        ivRed.setFitHeight(20);
+        ivRed.setFitWidth(20);
+
+        ImageView ivYellow = new ImageView(imgYellow);
+        ivYellow.setFitHeight(20);
+        ivYellow.setFitWidth(20);
+
+
+        menu.setGraphic(ivIcon);
+        menuItem1.setGraphic(ivBlue);
+        menuItem2.setGraphic(ivGreen);
+        menuItem3.setGraphic(ivOrange);
+        menuItem4.setGraphic(ivPink);
+        menuItem5.setGraphic(ivPurple);
+        menuItem6.setGraphic(ivRed);
+        menuItem7.setGraphic(ivYellow);
+
+        menuBar.getMenus().add(menu);
+
+        menu.getItems().addAll(menuItem1, menuItem2, menuItem3, menuItem4, menuItem5, menuItem6, menuItem7);
+
+        jcbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try{
+                    name = jtfName.getText();
+                    String port = jtfport.getText();
+                    serverName = jtfAddr.getText();
+                    PORT = Integer.parseInt(port);
+
+                    jtintro.setText("Connecting to " + serverName + " on port " + PORT + "as user" + name);
+                    server = new Socket(serverName, PORT);
+
+                    input = new BufferedReader(new InputStreamReader(server.getInputStream()));
+                    output = new PrintWriter(server.getOutputStream(), true);
+                    output.println(name);
+
+                    read = new Read();
+
+
+                } catch (Exception e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText("Couldn't connect"+e.getMessage());
+                }
+
+                primaryStage.setScene(Scene2);
+            }
+        });
+
+        jsbtndeco.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Disconnect");
+                alert.setHeaderText("Do you wish to Exit?");
+                alert.setResizable(false);
+                alert.setContentText("Terminate Chat");
+                Optional<ButtonType> result = alert.showAndWait();
+                ButtonType button = result.orElse(ButtonType.CANCEL);
+                if (button == ButtonType.OK) {
+                    primaryStage.close();
+                    System.out.println("Thank you for using ClubFroggy, Bye...");
+                } else {
+                    System.out.println("Canceled");
+                }
+            }
+        });
+
+
+        flowPane.setHgap(23);
+        flowPane.getChildren().addAll(jtfName,jtfAddr,jtfport,jcbtn);
+
+
+        vbox1.getChildren().addAll(menuBar,jtintro, flowPane);
+        vbox1.setSpacing(10);
+        vbox1.setPadding(new Insets(10, 10, 10, 10));
+
+        jtintro.setText("Hello welcome to the FroggyChat Login");
+        jtintro.setEditable(false);
+        jtfName.setText("Name");
+        jtfAddr.setText("Localhost");
+        jtfport.setText("8008");
+
+        Scene1 = new Scene(vbox1, 600, 225);
+//      Scene1.setFill(Color.web("#81c483"));
+
+
+        //Scene 2
+
+        hbox1.getChildren().addAll(jtextFilDiscu, jtextListUsers);
+        hbox1.setPrefHeight(500);
+        hbox1.setPrefWidth(700);
 
         jtextFilDiscu.setPrefSize(600, 500);
         jtextListUsers.setPrefSize(200, 500);
@@ -59,30 +215,31 @@ public class ClientGUI extends Application {
         jtextListUsers.setPadding(new Insets(2, 2, 2, 2));
         jtextInputChat.setPadding(new Insets(10, 10, 10, 10));
 
+        jtextFilDiscu.setEditable(false);
+        jtextListUsers.setEditable(false);
+
         jsbtndeco.setStyle("-fx-background-color: #e34234; ");
         jsbtn.setStyle("-fx-background-color: #32cd32; ");
 
-        hbox.setSpacing(5);
-        hbox.setPadding(new Insets(0, 0, 10, 0));
+        hbox1.setSpacing(5);
+        hbox1.setPadding(new Insets(0, 0, 10, 0));
 
-        vbox.setPrefHeight(600);
-        vbox.setPrefWidth(500);
-        vbox.setPadding(new Insets(10, 10, 10, 10));
+        vbox2.setPrefHeight(600);
+        vbox2.setPrefWidth(500);
+        vbox2.setPadding(new Insets(10, 10, 10, 10));
 
         gridPane.add(jsbtn, 1, 0);
         gridPane.add(jsbtndeco, 0, 0);
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         gridPane.setHgap(635);
 
-        vbox.getChildren().addAll(hbox, jtextInputChat, gridPane);
+        vbox2.getChildren().addAll(hbox1, jtextInputChat, gridPane);
 
-        Scene scene = new Scene(vbox, 800, 600);
+        Scene2 = new Scene(vbox2, 800, 600);
 
-        stage.setScene(scene);
-        stage.show();
-        
-        //Starts the FroggyClient code
-        fc=new FroggyClient(jtextFilDiscu);
+
+        primaryStage.setScene(Scene1);
+        primaryStage.show();
 
         jtextInputChat.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -112,24 +269,14 @@ public class ClientGUI extends Application {
                 sendMessage();
             }
         });
-        
-        //makes the disconnect button disconnect
-        jsbtndeco.setOnAction(new EventHandler<ActionEvent>(){
-          @Override
-          public void handle(ActionEvent e){
-            disconnect();
-          }
-        });
 
 
     }
 
-    //sends a message consisting of the color, the name, and the contents of the textfield.
-    private void sendMessage() {
-     fc.sendMessage(new Message(color, name, jtextInputChat.getText()));
+    public void sendMessage() {
     }
-    
-    private void disconnect(){
-     fc.disconnect();
-    }//end disconnect
+
+    class Read extends Thread{
+
+    }
 }
