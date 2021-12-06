@@ -146,14 +146,25 @@ class ServerThread extends Thread{
    //Creates a thread for the client, starts it, and stores it in an ArrayList
    ct=new ClientThread(cSocket, base, this);
    ct.start();
-   ctList.add(ct);
+   synchronized(ctList){
+    ctList.add(ct);
+   }//end synchronized
   }//end while
  }//end run
  
  //disconnects all clients
  public void doServerDisconnect(){
-  ctList.forEach((c) -> c.doServerDisconnect());
+  synchronized(ctList){ 
+   ctList.forEach((c) -> c.doServerDisconnect());
+  }//end synchronized
  }//end doServerDisconnect()
+ 
+ //sends a message to all clients
+ public void sendMessage(Message m){
+  synchronized(ctList){
+   ctList.forEach((c) -> c.doSendMessage(m));
+  }//end synchronized
+ }//ed sendMessage
 }//end ServerThread
 
 class ClientThread extends Thread{
@@ -168,6 +179,7 @@ class ClientThread extends Thread{
  private FroggyServer base;
  private Account account;
  private ServerThread server;
+ private Message mes;
  
  //constructor
  public ClientThread(Socket cs, FroggyServer fs, ServerThread st){
@@ -199,7 +211,10 @@ class ClientThread extends Thread{
       doLogIn();
       break;
      case"sm":
-      doSendMessage();
+      try{
+       mes=(Message)in.readObject();
+      }catch(ClassNotFoundException cnfe){return;}
+      server.sendMessage(mes);
       break; 
     }//end switch
    }//end while
@@ -300,5 +315,14 @@ class ClientThread extends Thread{
  }//end doLogIn
  
  //method to send a message
- public void doSendMessage(){}
+ public void doSendMessage(Message m){
+  if(loggedIn){ 
+   try{
+    out.writeUTF("nm");
+    out.writeObject(m);
+   }catch(IOException ioe){base.log("IOException "+ioe);
+    return;
+   }//end try/catch
+  }//end if
+ }//end doSendMesssage
 }//end ClientThread
