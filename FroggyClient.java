@@ -20,8 +20,8 @@ public class FroggyClient{
  private Message message;
  
  //Makes a client with associated socket, input, and output streams
- public FroggyClient(String a, TextArea ta){
-  address=a;
+ public FroggyClient(TextArea ta){
+  address="127.0.0.1";
   taLog=ta;
   hasConnected=true;
   try{
@@ -98,8 +98,8 @@ public class FroggyClient{
  
  //ClientThread's purpose is to listen for incoming transmissions and react accordingly
  class ClientThread extends Thread{
-  ObjectInputStream ois=null;
-  keepGoing=true;
+  private ObjectInputStream ois=null;
+  private boolean keepGoing=true;
   
   //Constructor
   public ClientThread(ObjectInputStream d){
@@ -154,7 +154,7 @@ public class FroggyClient{
        keepGoing=false;
        ois.close();
        oos.close();
-       socket.close();
+       soc.close();
      }//end switch
     }catch(IOException ioe){return;}//end try/catch   
    }//end while
