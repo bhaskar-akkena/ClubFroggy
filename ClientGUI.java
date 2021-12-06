@@ -1,13 +1,10 @@
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -80,14 +77,14 @@ public class ClientGui extends Application {
 
         //Scene 1
 
-        Image icon = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\frog.png"));
-        Image imgBlue = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\blue.png"));
-        Image imgGreen = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\green.png"));
-        Image imgOrange = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\orange.png"));
-        Image imgPink = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\pink.png"));
-        Image imgPurple = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\purple.png"));
-        Image imgRed = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\red.png"));
-        Image imgYellow = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\yellow.png"));
+        Image icon = new Image(new FileInputStream("Imgs\\frog.png"));
+        Image imgBlue = new Image(new FileInputStream("Imgs\\blue.png"));
+        Image imgGreen = new Image(new FileInputStream("Imgs\\green.png"));
+        Image imgOrange = new Image(new FileInputStream("Imgs\\orange.png"));
+        Image imgPink = new Image(new FileInputStream("Imgs\\pink.png"));
+        Image imgPurple = new Image(new FileInputStream("Imgs\\purple.png"));
+        Image imgRed = new Image(new FileInputStream("Imgs\\red.png"));
+        Image imgYellow = new Image(new FileInputStream("Imgs\\yellow.png"));
 
         ImageView ivIcon = new ImageView(icon);
         ivIcon.setFitHeight(20);
@@ -135,54 +132,30 @@ public class ClientGui extends Application {
 
         menu.getItems().addAll(menuItem1, menuItem2, menuItem3, menuItem4, menuItem5, menuItem6, menuItem7);
 
-        jcbtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try{
-                    name = jtfName.getText();
-                    String port = jtfport.getText();
-                    serverName = jtfAddr.getText();
-                    PORT = Integer.parseInt(port);
+        jcbtn.setOnAction(actionEvent -> {
+            try{
+                name = jtfName.getText();
+                String port = jtfport.getText();
+                serverName = jtfAddr.getText();
+                PORT = Integer.parseInt(port);
 
-                    jtintro.setText("Connecting to " + serverName + " on port " + PORT + "as user" + name);
-                    server = new Socket(serverName, PORT);
+                jtintro.setText("Connecting to " + serverName + " on port " + PORT + "as user" + name);
+                server = new Socket(serverName, PORT);
 
-                    input = new BufferedReader(new InputStreamReader(server.getInputStream()));
-                    output = new PrintWriter(server.getOutputStream(), true);
-                    output.println(name);
+                input = new BufferedReader(new InputStreamReader(server.getInputStream()));
+                output = new PrintWriter(server.getOutputStream(), true);
+                output.println(name);
 
-                    read = new Read();
+                read = new Read();
 
 
-                } catch (Exception e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setContentText("Couldn't connect"+e.getMessage());
-                }
-
-                primaryStage.setScene(Scene2);
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Couldn't connect"+e.getMessage());
             }
+
+            primaryStage.setScene(Scene2);
         });
-
-        jsbtndeco.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Disconnect");
-                alert.setHeaderText("Do you wish to Exit?");
-                alert.setResizable(false);
-                alert.setContentText("Terminate Chat");
-                Optional<ButtonType> result = alert.showAndWait();
-                ButtonType button = result.orElse(ButtonType.CANCEL);
-                if (button == ButtonType.OK) {
-                    primaryStage.close();
-                    System.out.println("Thank you for using ClubFroggy, Bye...");
-                } else {
-                    System.out.println("Canceled");
-                }
-            }
-        });
-
-
         flowPane.setHgap(23);
         flowPane.getChildren().addAll(jtfName,jtfAddr,jtfport,jcbtn);
 
@@ -235,48 +208,59 @@ public class ClientGui extends Application {
 
         vbox2.getChildren().addAll(hbox1, jtextInputChat, gridPane);
 
+        jsbtndeco.setOnAction(actionEvent -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Disconnect");
+            alert.setHeaderText("Do you wish to Exit?");
+            alert.setResizable(false);
+            alert.setContentText("Terminate Chat");
+            Optional<ButtonType> result = alert.showAndWait();
+            ButtonType button = result.orElse(ButtonType.CANCEL);
+//             read.interrupt();
+//             output.close();
+            if (button == ButtonType.OK) {
+                primaryStage.close();
+                System.out.println("Thank you for using ClubFroggy, Bye...");
+            } else {
+                System.out.println("Canceled");
+            }
+        });
+
         Scene2 = new Scene(vbox2, 800, 600);
 
 
         primaryStage.setScene(Scene1);
         primaryStage.show();
 
-        jtextInputChat.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            //Send message when Enter button is clicked
-            public void handle(KeyEvent e) {
-                if (e.getCode() == KeyCode.ENTER) {
-                    sendMessage();
-                }
-                //Get last message
-                if (e.getCode() == KeyCode.UP) {
-                    String currentMessage = jtextInputChat.getText().trim();
-                    jtextInputChat.setText(oldMsg);
-                    oldMsg = currentMessage;
-                }
-                if (e.getCode() == KeyCode.DOWN) {
-                    String currentMessage = jtextInputChat.getText().trim();
-                    jtextInputChat.setText(oldMsg);
-                    oldMsg = currentMessage;
-                }
+        //Send message when Enter button is clicked
+        jtextInputChat.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                sendMessage();
+            }
+            //Get last message
+            if (e.getCode() == KeyCode.UP) {
+                String currentMessage = jtextInputChat.getText().trim();
+                jtextInputChat.setText(oldMsg);
+                oldMsg = currentMessage;
+            }
+            if (e.getCode() == KeyCode.DOWN) {
+                String currentMessage = jtextInputChat.getText().trim();
+                jtextInputChat.setText(oldMsg);
+                oldMsg = currentMessage;
             }
         });
 
         //Click on send button
-        jsbtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent ae) {
-                sendMessage();
-            }
-        });
+        jsbtn.setOnAction(ae -> sendMessage());
 
 
     }
+
 
     public void sendMessage() {
     }
 
-    class Read extends Thread{
+    static class Read extends Thread{
 
     }
 }
