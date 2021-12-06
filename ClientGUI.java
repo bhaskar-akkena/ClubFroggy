@@ -216,8 +216,8 @@ public class ClientGui extends Application {
             alert.setContentText("Terminate Chat");
             Optional<ButtonType> result = alert.showAndWait();
             ButtonType button = result.orElse(ButtonType.CANCEL);
-            read.interrupt();
-            output.close();
+//             read.interrupt();
+//             output.close();
             if (button == ButtonType.OK) {
                 primaryStage.close();
                 System.out.println("Thank you for using ClubFroggy, Bye...");
