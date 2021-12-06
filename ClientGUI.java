@@ -34,6 +34,7 @@ public class ClientGUI extends Application {
     private String serverName;
     private int PORT;
     private String name;
+    private String color;
     private FroggyClient fc;
 
     public static void main(String[] args) {
@@ -111,10 +112,24 @@ public class ClientGUI extends Application {
                 sendMessage();
             }
         });
+        
+        //makes the disconnect button disconnect
+        jsbtndeco.setOnAction(new EventHandler<ActionEvent>(){
+          @Override
+          public void handle(ActionEvent e){
+            disconnect();
+          }
+        });
 
 
     }
 
+    //sends a message consisting of the color, the name, and the contents of the textfield.
     private void sendMessage() {
+     fc.sendMessage(new Message(color, name, jtextInputChat.getText()));
     }
+    
+    private void disconnect(){
+     fc.disconnect();
+    }//end disconnect
 }
