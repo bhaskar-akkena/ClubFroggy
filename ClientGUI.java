@@ -80,14 +80,14 @@ public class ClientGui extends Application {
 
         //Scene 1
 
-        Image icon = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\frog.png"));
-        Image imgBlue = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\blue.png"));
-        Image imgGreen = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\green.png"));
-        Image imgOrange = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\orange.png"));
-        Image imgPink = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\pink.png"));
-        Image imgPurple = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\purple.png"));
-        Image imgRed = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\red.png"));
-        Image imgYellow = new Image(new FileInputStream("D:\\demo\\demo17\\src\\main\\java\\com\\example\\demo17\\yellow.png"));
+        Image icon = new Image(new FileInputStream("Imgs\\frog.png"));
+        Image imgBlue = new Image(new FileInputStream("Imgs\\blue.png"));
+        Image imgGreen = new Image(new FileInputStream("Imgs\\green.png"));
+        Image imgOrange = new Image(new FileInputStream("Imgs\\orange.png"));
+        Image imgPink = new Image(new FileInputStream("Imgs\\pink.png"));
+        Image imgPurple = new Image(new FileInputStream("Imgs\\purple.png"));
+        Image imgRed = new Image(new FileInputStream("Imgs\\red.png"));
+        Image imgYellow = new Image(new FileInputStream("Imgs\\yellow.png"));
 
         ImageView ivIcon = new ImageView(icon);
         ivIcon.setFitHeight(20);
