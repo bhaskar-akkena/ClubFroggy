@@ -32,7 +32,7 @@ public class ClientGUI extends Application implements EventHandler<ActionEvent>{
  private Label lblYellow=new Label("Yellow");
  private Label lblBlue=new Label("Blue");
  private TextArea taLog=new TextArea();
- private Label lblMessage=new Label("Message");
+ private Label lblMessage=new Label("Message: ");
  private TextField tfMessage=new TextField();
  private Button btnSend=new Button("Send");
  private Button btnDisconnect=new Button("Disconnect");
