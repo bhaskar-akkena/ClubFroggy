@@ -118,6 +118,8 @@ public class ClientGUI extends Application implements EventHandler<ActionEvent>{
   btnSend.setStyle("-fx-background-color: #32cd32; ");
   btnDisconnect.setOnAction(this);
   btnDisconnect.setStyle("-fx-background-color: #e34234; ");
+          root.setStyle("-fx-background-color: linear-gradient(to bottom, #ff7f50, #6a5acd)");
+
     
         //Adds elements to where they get shown + cleanup
   tfMessage.setPrefWidth(466);
