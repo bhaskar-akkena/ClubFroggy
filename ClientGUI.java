@@ -119,7 +119,7 @@ public class ClientGUI extends Application implements EventHandler<ActionEvent>{
   btnDisconnect.setStyle("-fx-background-color: #e34234; ");
     
         //Adds elements to where they get shown + cleanup
-  tfMessage.setPrefWidth(460);
+  tfMessage.setPrefWidth(466);
         cbColor.getItems().addAll(lblPink, lblOrange, lblRed, lblBlue, lblGreen, lblYellow);
         box1.getChildren().addAll(lblUsername, tfUsername, btnLogIn);
         box1.setSpacing(5);
