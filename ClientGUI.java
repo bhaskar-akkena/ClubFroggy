@@ -114,7 +114,9 @@ public class ClientGUI extends Application implements EventHandler<ActionEvent>{
   btnLogIn.setOnAction(this);
   btnSignUp.setOnAction(this);
   btnSend.setOnAction(this);
+  btnSend.setStyle("-fx-background-color: #32cd32; ");
   btnDisconnect.setOnAction(this);
+  btnDisconnect.setStyle("-fx-background-color: #e34234; ");
     
         //Adds elements to where they get shown + cleanup
         cbColor.getItems().addAll(lblPink, lblOrange, lblRed, lblBlue, lblGreen, lblYellow);
