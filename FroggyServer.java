@@ -337,7 +337,3 @@ class ClientThread extends Thread{
   }//end if
  }//end doSendMesssage
 }//end ClientThread
-<<<<<<< HEAD
-}//end ClientThread
-=======
->>>>>>> a7c158123186017683000f15781f18ad4229bd9d
