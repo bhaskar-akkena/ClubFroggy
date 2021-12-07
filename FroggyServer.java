@@ -13,12 +13,15 @@ public class FroggyServer{
  private TreeMap<String, Account> map = new TreeMap<String, Account>();
  private Account tempAccount;
  private ServerThread st = null;
+ 
+ //accessor for the ServerThread
+ public ServerThread getServerThread(){return st;}
 
  //final
  private final File ACCOUNT_FILE=new File("accounts.dat");
 
  //Constructor. 
- public void FroggyServer(TextArea ta){
+ public FroggyServer(TextArea ta){
   taLog=ta;
 
   //read the file into the TreeMap
@@ -58,20 +61,22 @@ public class FroggyServer{
  
  //saves the accounts to a binary file
  public void save(){
-  try{
-   //if the file doesn't exist, creates it.
-   if(!ACCOUNT_FILE.exists())
-    ACCOUNT_FILE.createNewFile();
-   
-   //writes each account to the file
-   oos = new ObjectOutputStream(new FileOutputStream(ACCOUNT_FILE));
-   for(Map.Entry<String, Account> entry : map.entrySet())
-    oos.writeObject(entry.getValue());
-   
-   //closes and flushes the ObjectOutputStream
-   oos.flush();
-   oos.close();
-  }catch(IOException ioe){return;}
+  if(map.size()>0){
+   try{
+    //if the file doesn't exist, creates it.
+    if(!ACCOUNT_FILE.exists())
+     ACCOUNT_FILE.createNewFile();
+    
+    //writes each account to the file
+    oos = new ObjectOutputStream(new FileOutputStream(ACCOUNT_FILE));
+    for(Map.Entry<String, Account> entry : map.entrySet())
+     oos.writeObject(entry.getValue());
+    
+    //closes and flushes the ObjectOutputStream
+    oos.flush();
+    oos.close();
+   }catch(IOException ioe){return;}
+  }//end if
  }//end save
  
  //logs in a user
@@ -119,7 +124,6 @@ class ServerThread extends Thread{
  //final
  private static final int PORT=5002;
 
- 
  //basic Constructor
  public ServerThread(FroggyServer fs){
   base=fs;
@@ -320,6 +324,7 @@ class ClientThread extends Thread{
    try{
     out.writeUTF("nm");
     out.writeObject(m);
+    out.flush();
    }catch(IOException ioe){base.log("IOException "+ioe);
     return;
    }//end try/catch
