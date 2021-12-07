@@ -57,19 +57,74 @@ public class ClientGUI extends Application implements EventHandler<ActionEvent>{
   taLog.setEditable(false);
   stage.setTitle("Club Froggy!");
   
+  //Image Icons
+        Image icon = new Image(new FileInputStream("Imgs\\frog.png"));
+        Image imgBlue = new Image(new FileInputStream("Imgs\\blue.png"));
+        Image imgGreen = new Image(new FileInputStream("Imgs\\green.png"));
+        Image imgOrange = new Image(new FileInputStream("Imgs\\orange.png"));
+        Image imgPink = new Image(new FileInputStream("Imgs\\pink.png"));
+        Image imgPurple = new Image(new FileInputStream("Imgs\\purple.png"));
+        Image imgRed = new Image(new FileInputStream("Imgs\\red.png"));
+        Image imgYellow = new Image(new FileInputStream("Imgs\\yellow.png"));
+
+        ImageView ivIcon = new ImageView(icon);
+        ivIcon.setFitHeight(20);
+        ivIcon.setFitWidth(20);
+
+        ImageView ivBlue = new ImageView(imgBlue);
+        ivBlue.setFitHeight(20);
+        ivBlue.setFitWidth(20);
+
+        ImageView ivGreen = new ImageView(imgGreen);
+        ivGreen.setFitHeight(20);
+        ivGreen.setFitWidth(20);
+
+        ImageView ivOrange = new ImageView(imgOrange);
+        ivOrange.setFitHeight(20);
+        ivOrange.setFitWidth(20);
+
+        ImageView ivPink = new ImageView(imgPink);
+        ivPink.setFitHeight(20);
+        ivPink.setFitWidth(20);
+
+        ImageView ivPurple = new ImageView(imgPurple);
+        ivPurple.setFitHeight(20);
+        ivPurple.setFitWidth(20);
+
+        ImageView ivRed = new ImageView(imgRed);
+        ivRed.setFitHeight(20);
+        ivRed.setFitWidth(20);
+
+        ImageView ivYellow = new ImageView(imgYellow);
+        ivYellow.setFitHeight(20);
+        ivYellow.setFitWidth(20);
+
+        lblBlue.setGraphic(ivBlue);
+        lblGreen.setGraphic(ivGreen);
+        lblYellow.setGraphic(ivYellow);
+        lblOrange.setGraphic(ivOrange);
+        lblRed.setGraphic(ivRed);
+        lblPink.setGraphic(ivPink);
+  
   //makes the buttons do things
   btnLogIn.setOnAction(this);
   btnSignUp.setOnAction(this);
   btnSend.setOnAction(this);
   btnDisconnect.setOnAction(this);
     
-  //Adds elements to where they get shown
-  cbColor.getItems().addAll(lblPink, lblOrange, lblRed, lblBlue, lblGreen, lblYellow);
-  box1.getChildren().addAll(lblUsername, tfUsername, btnLogIn);
-  box2.getChildren().addAll(lblPassword, tfPassword, btnSignUp);
-  box3.getChildren().addAll(lblMessage, tfMessage);
-  box4.getChildren().addAll(btnSend, btnDisconnect);
-  root.getChildren().addAll(box1, box2, cbColor, taLog, box3, box4);
+        //Adds elements to where they get shown + cleanup
+        cbColor.getItems().addAll(lblPink, lblOrange, lblRed, lblBlue, lblGreen, lblYellow);
+        box1.getChildren().addAll(lblUsername, tfUsername, btnLogIn);
+        box1.setSpacing(5);
+        box2.getChildren().addAll(lblPassword, tfPassword, btnSignUp);
+        box2.setSpacing(5);
+        box3.getChildren().addAll(lblMessage, tfMessage);
+        box3.setSpacing(5);
+        box4.getChildren().addAll(btnSend, btnDisconnect);
+        box4.setSpacing(400);
+        root.getChildren().addAll(box1, box2, cbColor, taLog, box3, box4);
+        root.setSpacing(5);
+        root.setPadding(new Insets(5,5,5,5));
   
   //starts the GUI
   scene=new Scene(root);
