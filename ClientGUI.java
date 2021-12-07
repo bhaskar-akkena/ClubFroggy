@@ -37,6 +37,16 @@ public class ClientGUI extends Application implements EventHandler<ActionEvent>{
  private Button btnSend=new Button("Send");
  private Button btnDisconnect=new Button("Disconnect");
  
+ //Images
+        Image icon = new Image(new FileInputStream("Imgs\\frog.png"));
+        Image imgBlue = new Image(new FileInputStream("Imgs\\blue.png"));
+        Image imgGreen = new Image(new FileInputStream("Imgs\\green.png"));
+        Image imgOrange = new Image(new FileInputStream("Imgs\\orange.png"));
+        Image imgPink = new Image(new FileInputStream("Imgs\\pink.png"));
+        Image imgPurple = new Image(new FileInputStream("Imgs\\purple.png"));
+        Image imgRed = new Image(new FileInputStream("Imgs\\red.png"));
+        Image imgYellow = new Image(new FileInputStream("Imgs\\yellow.png"));
+ 
  //Scene design
  private HBox box1=new HBox();
  private HBox box2=new HBox();
@@ -62,15 +72,6 @@ public class ClientGUI extends Application implements EventHandler<ActionEvent>{
   stage.setTitle("Club Froggy!");
   
   //Image Icons
-        Image icon = new Image(new FileInputStream("Imgs\\frog.png"));
-        Image imgBlue = new Image(new FileInputStream("Imgs\\blue.png"));
-        Image imgGreen = new Image(new FileInputStream("Imgs\\green.png"));
-        Image imgOrange = new Image(new FileInputStream("Imgs\\orange.png"));
-        Image imgPink = new Image(new FileInputStream("Imgs\\pink.png"));
-        Image imgPurple = new Image(new FileInputStream("Imgs\\purple.png"));
-        Image imgRed = new Image(new FileInputStream("Imgs\\red.png"));
-        Image imgYellow = new Image(new FileInputStream("Imgs\\yellow.png"));
-
         ImageView ivIcon = new ImageView(icon);
         ivIcon.setFitHeight(20);
         ivIcon.setFitWidth(20);
@@ -120,6 +121,7 @@ public class ClientGUI extends Application implements EventHandler<ActionEvent>{
     
         //Adds elements to where they get shown + cleanup
   tfMessage.setPrefWidth(466);
+  cbColor.setPromptText("Choose Froggy Color");
         cbColor.getItems().addAll(lblPink, lblOrange, lblRed, lblBlue, lblGreen, lblYellow);
         box1.getChildren().addAll(lblUsername, tfUsername, btnLogIn);
         box1.setSpacing(5);
