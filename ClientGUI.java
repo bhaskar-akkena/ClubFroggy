@@ -44,6 +44,7 @@ public class ClientGUI extends Application implements EventHandler<ActionEvent>{
  private Stage stage;
  private Scene scene;
  private FroggyClient fc;
+ private String userName="";
  
  //launches the GUI
  public static void main(String[] args){launch();}
@@ -74,12 +75,56 @@ public class ClientGUI extends Application implements EventHandler<ActionEvent>{
   scene=new Scene(root);
   stage.setScene(scene);
   stage.show();
-  //fc=new FroggyClient(taLog);
+  
+  //Activates the code that actually does things
+  fc=new FroggyClient(taLog);
  }//end start
  
  //buttons do things when clicked
  @Override
  public void handle(ActionEvent e){
-  System.out.println("here");
+  Button b=(Button)e.getSource();
+  
+  switch(b.getText()){
+   case"Log In":
+    doLogIn();
+    break;
+   case"Sign Up":
+    doSignUp();
+    break;
+   case"Send":
+    doSend();
+    break;
+   case"Disconnect":
+    doDisconnect();
+    break;
+  }//end switch
  }//end handle
+ 
+ public void doLogIn(){
+  if(userName.equals("")){
+   userName=tfUsername.getText();
+   fc.logIn(tfUsername.getText(), tfPassword.getText());
+  }
+ }
+ 
+ public void doSignUp(){
+  if(userName.equals("")){
+   userName=tfUsername.getText();
+   fc.createAccount(tfUsername.getText(), tfPassword.getText(), cbColor.getValue().getText());
+  }
+ }
+ 
+ public void doSend(){
+  if(!userName.equals("")){
+   fc.sendMessage(new Message(cbColor.getValue().getText(), userName, tfMessage.getText()));
+  }
+ }
+ 
+ public void doDisconnect(){
+  fc.disconnect();
+ }
+ 
+ 
+ 
 }//end ClientGUI
