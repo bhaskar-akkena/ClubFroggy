@@ -5,7 +5,6 @@ import javafx.scene.control.TextArea;
 public class FroggyClient{
  //for use in the code
  private String address;
- private final int PORT=5001;
  private Socket soc=null;
  private ObjectOutputStream oos=null;
  private ObjectInputStream ois = null;
@@ -19,9 +18,13 @@ public class FroggyClient{
  private String response;
  private Message message;
  
+ //FINAL
+ private final String ADDRESS="127.0.0.1";
+ private final int PORT=5002;
+
+ 
  //Makes a client with associated socket, input, and output streams
  public FroggyClient(TextArea ta){
-  address="127.0.0.1";
   taLog=ta;
   hasConnected=true;
   try{
@@ -30,6 +33,7 @@ public class FroggyClient{
    ois=new ObjectInputStream(soc.getInputStream());
    ct=new ClientThread(ois);
    ct.start();
+   informUser("Connected to server");
   }catch(Exception e){return;}
  }//endFroggyClient
  
@@ -54,7 +58,7 @@ public class FroggyClient{
  }//end disconnect
  
  //Method to log in a user
- public void  logIn(String username, String password){
+ public void logIn(String username, String password){
   try{
    //sends login information to the server
    oos.writeUTF("l");
@@ -65,11 +69,11 @@ public class FroggyClient{
  }//end Log In
  
  //method to create an account
- public void createAccount(String username, String password, String color, int age){
+ public void createAccount(String username, String password, String color){
   try{
    //Informs the server of the account's username, password, color, and age
    oos.writeUTF("c");
-   account=new Account(username, password, age, color);
+   account=new Account(username, password, color);
    oos.writeObject(account);
    oos.flush();
   }catch(IOException ioe){return;}
