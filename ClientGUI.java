@@ -18,7 +18,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Optional;
 
-public class ClientGui extends Application {
+public class ClientGUI extends Application {
 
     Scene Scene1, Scene2;
 
