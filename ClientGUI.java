@@ -118,7 +118,7 @@ public class ClientGUI extends Application implements EventHandler<ActionEvent>{
   btnSend.setStyle("-fx-background-color: #32cd32; ");
   btnDisconnect.setOnAction(this);
   btnDisconnect.setStyle("-fx-background-color: #e34234; ");
-  root.setStyle("-fx-background-color: linear-gradient(to right, #EA8D8D, #A890FE)");
+  root.setStyle("-fx-background-color: linear-gradient(to right, #ff7f50, #6a5acd)");
 
 
     
