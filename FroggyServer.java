@@ -36,7 +36,7 @@ public class FroggyServer{
      map.put(tempAccount.getName(), tempAccount);
     }//end while
    }//end if
-  }catch(Exception e){return;}
+  }catch(IOException ioe){log("Read "+map.size()+" accounts\n");}
   
   //displays the machine's ip address
   try{
@@ -336,5 +336,4 @@ class ClientThread extends Thread{
    }//end try/catch
   }//end if
  }//end doSendMesssage
-}//end ClientThread
 }//end ClientThread
